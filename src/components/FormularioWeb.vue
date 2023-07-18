@@ -88,7 +88,7 @@ const emit = defineEmits(["add-users"]);
 
 const submitForm = async () => {
   console.log(v$);
-  const result = await v$.$validate();
+  const result = await v$.value.$validate();
   if (result) {
     emit("add-users", { ...state });
     resetFormData();
