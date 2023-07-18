@@ -20,7 +20,7 @@
 </template>
 
 <script setup>
-const { user } = defineProps(["user"]);
+const { users } = defineProps(["users"]);
 </script>
 
 <style scoped>

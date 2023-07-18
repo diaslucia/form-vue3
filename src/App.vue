@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <FormularioWeb @add-users="addUsers" />
-    <TablaUsuarios :user="users" v-if="users.length > 0" />
+    <TablaUsuarios :users="users" v-if="users.length > 0" />
   </div>
 </template>
 
