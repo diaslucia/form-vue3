@@ -87,12 +87,11 @@ const v$ = useVuelidate(rules, state);
 const emit = defineEmits(["add-users"]);
 
 const submitForm = async () => {
-  console.log(v$.value);
   const result = await v$.value.$validate();
   if (result) {
     emit("add-users", { ...state });
     resetFormData();
-    v$.$reset();
+    v$.value.$reset();
   }
 };
 
