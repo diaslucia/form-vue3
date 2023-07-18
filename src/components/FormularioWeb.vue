@@ -2,29 +2,15 @@
   <form @submit.prevent.stop="submitForm" class="form">
     <label for="name">
       <span>Nombre Completo</span>
-      <input
-        name="name"
-        id="name"
-        type="text"
-        v-model="state.name"
-        minlength="2"
-        required
-      />
-      <span v-if="v$.name.$error">
-        {{ v$.name.$errors[0].$message }}
-      </span>
+      <input name="name" id="name" type="text" v-model="state.name" />
     </label>
+    <span v-if="v$.name.$error">
+      {{ v$.name.$errors[0].$message }}
+    </span>
 
     <label for="age">
       <span>Edad</span>
-      <input
-        id="age"
-        name="age"
-        type="number"
-        v-model="state.age"
-        required
-        min="18"
-      />
+      <input id="age" name="age" type="number" v-model="state.age" />
       <span v-if="v$.age.$error">
         {{ v$.age.$errors[0].$message }}
       </span>
@@ -32,13 +18,7 @@
 
     <label for="email">
       <span>Email</span>
-      <input
-        id="email"
-        name="email"
-        type="email"
-        v-model="state.email"
-        required
-      />
+      <input id="email" name="email" type="email" v-model="state.email" />
       <span v-if="v$.email.$error">
         {{ v$.email.$errors[0].$message }}
       </span>
@@ -51,8 +31,6 @@
         name="password"
         type="password"
         v-model="state.password"
-        minlength="6"
-        required
       />
       <span v-if="v$.password.$error">
         {{ v$.name.$password[0].$message }}
@@ -66,7 +44,13 @@
 <script setup>
 import { reactive, computed } from "vue";
 import { useVuelidate } from "@vuelidate/core";
-import { required, email, minLength, minValue } from "@vuelidate/validators";
+import {
+  required,
+  email,
+  minLength,
+  minValue,
+  helpers,
+} from "@vuelidate/validators";
 
 const state = reactive({
   name: "",
@@ -77,10 +61,25 @@ const state = reactive({
 
 const rules = computed(() => {
   return {
-    name: { required, minLength: minLength(2) },
-    age: { required, minValue: minValue(18) },
+    name: {
+      required,
+      minLength: helpers.withMessage(
+        "Debe tenér como mínimo dos caracteres",
+        minLength(2)
+      ),
+    },
+    age: {
+      required,
+      minValue: helpers.withMessage("Debe ser mayor de edad", minValue(18)),
+    },
     email: { required, email },
-    password: { required, minLength: minLength(6) },
+    password: {
+      required,
+      minLength: helpers.withMessage(
+        "Debe tenér como mínimo seis caracteres",
+        minLength(6)
+      ),
+    },
   };
 });
 
@@ -88,10 +87,12 @@ const v$ = useVuelidate(rules, state);
 const emit = defineEmits(["add-users"]);
 
 const submitForm = async () => {
-  const result = await v$.value.$validate();
+  console.log(v$);
+  const result = await v$.$validate();
   if (result) {
-    emit("add-users", { ...this.model });
+    emit("add-users", { ...state });
     resetFormData();
+    v$.$reset();
   }
 };
 
