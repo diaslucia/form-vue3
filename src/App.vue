@@ -8,8 +8,9 @@
 <script setup>
 import FormularioWeb from "./components/FormularioWeb.vue";
 import TablaUsuarios from "./components/TablaUsuarios.vue";
+import { reactive } from "vue";
 
-let users = [];
+let users = reactive([]);
 
 const addUsers = (user) => {
   users.push(user);

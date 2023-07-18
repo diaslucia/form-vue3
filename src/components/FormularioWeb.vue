@@ -3,15 +3,15 @@
     <label for="name">
       <span>Nombre Completo</span>
       <input name="name" id="name" type="text" v-model="state.name" />
+      <span v-if="v$.name.$error" class="error">
+        {{ v$.name.$errors[0].$message }}
+      </span>
     </label>
-    <span v-if="v$.name.$error">
-      {{ v$.name.$errors[0].$message }}
-    </span>
 
     <label for="age">
       <span>Edad</span>
       <input id="age" name="age" type="number" v-model="state.age" />
-      <span v-if="v$.age.$error">
+      <span v-if="v$.age.$error" class="error">
         {{ v$.age.$errors[0].$message }}
       </span>
     </label>
@@ -19,7 +19,7 @@
     <label for="email">
       <span>Email</span>
       <input id="email" name="email" type="email" v-model="state.email" />
-      <span v-if="v$.email.$error">
+      <span v-if="v$.email.$error" class="error">
         {{ v$.email.$errors[0].$message }}
       </span>
     </label>
@@ -32,8 +32,8 @@
         type="password"
         v-model="state.password"
       />
-      <span v-if="v$.password.$error">
-        {{ v$.name.$password[0].$message }}
+      <span v-if="v$.password.$error" class="error">
+        {{ v$.password.$errors[0].$message }}
       </span>
     </label>
 
@@ -87,7 +87,7 @@ const v$ = useVuelidate(rules, state);
 const emit = defineEmits(["add-users"]);
 
 const submitForm = async () => {
-  console.log(v$);
+  console.log(v$.value);
   const result = await v$.value.$validate();
   if (result) {
     emit("add-users", { ...state });
@@ -105,7 +105,7 @@ const resetFormData = () => {
 .form {
   background-color: white;
   border-radius: 20px;
-  padding: 50px 20px;
+  padding: 20px 20px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -118,6 +118,7 @@ label {
   display: flex;
   flex-direction: column;
   height: 75px;
+  margin: 0 0 10px 0;
 }
 input {
   border: 2px solid rgb(19, 19, 43);
@@ -152,5 +153,6 @@ input:focus {
   border: none;
   border-radius: 10px;
   padding: 5px 0;
+  margin-top: 20px;
 }
 </style>
